@@ -34,7 +34,7 @@ Pass in an options object to change the default behavior of `cy.go()`.
 Option | Default | Description
 --- | --- | ---
 `log` | `true` | {% usage_options log %}
-`timeout` | {% url `pageLoadTimeout` configuration#Timeouts %} | {% usage_options timeout cy.go %}
+`timeout` | {% url `pageLoadTimeout` configuration#Timeouts %} | {% usage_options timeout cy.go %} Note: Network requests are limited by the underlying operating system, and may still time out if this value is increased.
 
 ## Yields {% helper_icon yields %}
 

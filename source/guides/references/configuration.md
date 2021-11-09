@@ -16,7 +16,7 @@ The default behavior of Cypress can be modified by supplying any of the followin
 
 Option | Default | Description
 ----- | ---- | ----
-`baseUrl` | `null` | URL used as prefix for {% url `cy.visit()` visit %} or {% url `cy.request()` request %} command's URL
+`baseUrl` | `null` | A fully qualified URL used as prefix for {% url `cy.visit()` visit %} or {% url `cy.request()` request %} command's URL
 `env` | `{}` | Any values to be set as {% url 'environment variables' environment-variables %}
 `numTestsKeptInMemory` | `50` | The number of tests for which snapshots and command data are kept in memory. Reduce this number if you are experiencing high memory consumption in your browser during a test run.
 `port` | `null` | Port used to host Cypress. Normally this is a randomly generated port
@@ -183,7 +183,7 @@ While this may take a bit more work than other options - it yields you the most 
 
 ## Environment Variables
 
-You can also use {% url 'environment variables' environment-variables %} to override configuration values. This is especially useful in {% url 'Continuous Integration' continuous-integration-introduction %} or when working locally. This gives you the ability to change configuration options without modifying any code or build scripts.
+You can use {% url 'environment variables' environment-variables %} to override configuration values. This is especially useful in {% url 'Continuous Integration' continuous-integration-introduction %} or when working locally. This gives you the ability to change configuration options without modifying any code or build scripts.
 
 By default, any environment variable that matches a corresponding configuration key will override the configuration file (`cypress.json` by default) value.
 
@@ -213,13 +213,17 @@ Environment variables that do not match configuration keys will instead be set a
 You can {% url 'read more about Environment Variables' environment-variables %}.
 {% endnote %}
 
-## `Cypress.config()`
+## Test-time Overrides
 
-You can also override configuration values within your test using {% url `Cypress.config()` config %}.
+We provide two options for override the configuration while your test are running, `Cypress.config()` and suite- or test-specific configuration overrides.
 
-{% note warning Scope %}
-Configuration set using `Cypress.config` _is only in scope for the current spec file._
-{% endnote %}
+{% partial allowed_test_config %}
+
+### `Cypress.config()`
+
+You can override configuration values within your test using {% url `Cypress.config()` config %}.
+
+This changes the configuration _for the remaining execution of the current spec file_. The values will reset to the previous default values after spec has complete.
 
 ```javascript
 Cypress.config('pageLoadTimeout', 100000)
@@ -227,43 +231,67 @@ Cypress.config('pageLoadTimeout', 100000)
 Cypress.config('pageLoadTimeout') // => 100000
 ```
 
-## Test Configuration
+### Test Configuration
 
-To apply specific Cypress {% url "configuration" configuration %} values to a suite or test, pass a configuration object to the test or suite function as the second argument.
+You can apply specific Cypress configuration values to a suite or test by passing a configuration object to the suite or test function as the second argument.
 
-The configuration values passed in will only take effect during the suite or test where they are set. The values will then reset to the previous default values after the suite or test is complete.
+The configuration values passed in will only take effect _during the suite or test where they are set_. The values will then reset to the previous default values after the suite or test is complete.
 
-{% partial allowed_test_config %}
+#### Syntax
 
-### Suite configuration
+```javascript
+describe(name, config, fn)
+context(name, config, fn)
+it(name, config, fn)
+specify(name, config, fn)
+```
 
-You can configure the number of times to retries a suite of tests if they fail during `cypress run` and `cypress open` separately.
+#### Suite configuration
+
+If you want to target a suite of tests to run or be excluded when run in a specific browser, you can override the `browser` configuration within the suite configuration. The `browser` option accepts the same arguments as {% url "`Cypress.isBrowser()`" isbrowser %}.
+
+The following suite of tests will be skipped if running tests in Chrome browsers.
 
 ```js
-describe('login', {
-  retries: {
-    runMode: 3,
-    openMode: 2
-  }
-}, () => {
-  it('should redirect unauthenticated user to sign-in page', () => {
-    // ...
-  })
-
-  it('allows user to login', () => {
-    // ...
+describe('When NOT in Chrome', { browser: '!chrome' }, () => {
+  it('Shows warning', () => {
+    cy.get('.browser-warning')
+      .should('contain', 'For optimal viewing, use Chrome browser')
   })
 })
 ```
 
-### Single test configuration
+The following suite of tests will only execute when running in the Firefox browser and will merge any current environment variables with the provided ones.
+
+```js
+describe('When in Firefox', {
+  browser: 'firefox',
+  env: {
+    API: 'http://localhost:9000'
+  }
+}, () => {
+  it('Sets the API url', () => {
+    expect(cy.env('API')).to.equal('http://localhost:9000')
+  })
+})
+```
+
+#### Single test configuration
 
 If you want to target a test to run or be excluded when run in a specific browser, you can override the `browser` configuration within the test configuration. The `browser` option accepts the same arguments as {% url "`Cypress.isBrowser()`" isbrowser %}.
 
+You can configure the number of retry attempts during `cypress run` or `cypress open`. See {% url "Test Retries" test-retries %} for more information.
+
 ```js
-it('Show warning outside Chrome', {  browser: '!chrome' }, () => {
-  cy.get('.browser-warning')
-    .should('contain', 'For optimal viewing, use Chrome browser')
+it('should redirect unauthenticated user to sign-in page', {
+    retries: {
+      runMode: 3,
+      openMode: 2
+    }
+  } () => {
+    cy.visit('/')
+    // ...
+  })
 })
 ```
 

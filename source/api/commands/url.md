@@ -88,9 +88,9 @@ But you may be wondering where the URL property comes from.  Per the `window.loc
 
 ### Hardcoded versus using the configuration object
 
-Instead of hardcoding the URL you can use the `baseUrl` of the {% url 'Cypress configuration' configuration %}.
+Instead of hard-coding the URL used in the assertion, you can use the `baseUrl` defined in the {% url 'Cypress configuration' configuration %}.
 
-Given the remote URL, `http://localhost:8000/index.html`, these assertions are the same.
+Given the remote URL, `http://localhost:8000/index.html`, and the baseUrl is set to `http://localhost:8000` these assertions are the same.
 
 ```javascript
 cy.url().should('eq', 'http://localhost:8000/index.html')

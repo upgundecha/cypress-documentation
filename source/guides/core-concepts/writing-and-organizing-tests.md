@@ -365,26 +365,9 @@ it.skip('returns "fizz" when number is multiple of 3', () => {
 
 ## Test Configuration
 
-To apply a specific Cypress {% url "configuration" configuration %} value to a suite or test, pass a configuration object to the test or suite function as the second argument.
+It is possible to apply {% url "test-time configuration" configuration#Test-time-Overrides %}  values during test execution.
 
-This configuration will take effect during the suite or tests where they are set then return to their previous default values after the suite or tests are complete.
-
-### Syntax
-
-```javascript
-describe(name, config, fn)
-context(name, config, fn)
-it(name, config, fn)
-specify(name, config, fn)
-```
-
-### Allowed config values
-
-{% partial allowed_test_config %}
-
-### Suite configuration
-
-If you want to target a suite of tests to run or be excluded when run in a specific browser, you can override the `browser` configuration within the suite configuration. The `browser` option accepts the same arguments as {% url "`Cypress.isBrowser()`" isbrowser %}.
+For example, if you want to target a suite of tests to run or be excluded when run in a specific browser, you can override the `browser` configuration within the suite configuration. The `browser` option accepts the same arguments as {% url "`Cypress.isBrowser()`" isbrowser %}.
 
 The following suite of tests will be skipped if running tests in Chrome browsers.
 
@@ -399,53 +382,6 @@ describe('When NOT in Chrome', { browser: '!chrome' }, () => {
     cy.get('a.browser-compat')
       .should('have.attr', 'href')
       .and('include', 'browser-compatibility')
-  })
-})
-```
-
-The following suite of tests will only execute when running in the Firefox browser. It will overwrite the viewport resolution in one of the tests, and will merge any current environment variables with the provided ones.
-
-```js
-describe('When in Firefox', {
-  browser: 'firefox',
-  viewportWidth: 1024,
-  viewportHeight: 700,
-  env: {
-    DEMO: true,
-    API: 'http://localhost:9000'
-  }
-}, () => {
-  it('Sets the expected viewport and API url', () => {
-    expect(cy.config('viewportWidth')).to.equal(1024)
-    expect(cy.config('viewportHeight')).to.equal(700)
-    expect(cy.env('API')).to.equal('http://localhost:9000')
-  })
-
-  it('Uses the closest API environment variable', {
-    env: {
-      API: 'http://localhost:3003'
-    }
-  }, () => {
-    expect(cy.env('API')).to.equal('http://localhost:3003')
-    // other environment variables remain unchanged
-    expect(cy.env('DEMO')).to.be.true
-  })
-})
-```
-
-### Single test configuration
-
-You can configure the number of retry attempts during `cypress run` or `cypress open`. See {% url "Test Retries" test-retries %} for more information.
-
-```js
-it('should redirect unauthenticated user to sign-in page', {
-    retries: {
-      runMode: 3,
-      openMode: 2
-    }
-  } () => {
-    cy.visit('/')
-    // ...
   })
 })
 ```

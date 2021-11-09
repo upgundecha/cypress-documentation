@@ -79,7 +79,7 @@ Cypress.config('pageLoadTimeout') // => 60000
 ### Change the values of configuration options from configuration file (`cypress.json` by default) from within your tests
 
 {% note warning Scope %}
-Remember, any changes that you make to configuration using this API will only be in effect for the remainder of the tests _in the same spec file._
+Remember, any changes that you make to configuration using this API will be in effect for the remainder of the tests _in the same spec file._
 {% endnote %}
 
 ```json
@@ -119,15 +119,32 @@ Cypress.config() // => {defaultCommandTimeout: 10000, viewportHeight: 900, ...}
 
 ## Not all config values can be changed at all times
 
-Some configuration values cannot be changed while running a test. Anything that's not directly under Cypress's control - like timeouts, `userAgent`, or environment variables - will be ignored at run-time.
+Some configuration values are readonly and cannot be changed while running a test. Anything that's not directly under Cypress's control - like timeouts, `userAgent`, or environment variables - will be ignored at run-time. Be sure to review the list of {% url "test-time configuration options " configuration##Test-time-Overrides %}
 
-## Test Configuration
 
-To apply specific Cypress {% url "configuration" configuration %} values to a suite or test, you can pass a {% url "test configuration" configuration#Test-Configuration %} object to the test or suite function.
+## Test Configuration vs `Cypress.config()`
+
+To apply specific Cypress configuration values to a suite or test, you can pass a {% url "test configuration" configuration#Test-Configuration %} object to the test or suite function. This
 
 While `Cypress.config()` changes configuration values through the entire spec file, using test configuration will only change configuration values during the suite or test where they are set. The values will then reset to the previous default values after the suite or test is complete.
 
 See the full guide on {% url "test configuration", configuration#Test-Configuration %}.
+
+## `Cypress.config()` executes Synchronously
+
+It's important to note that `Cypress.config()` executes synchronously and will not wait for the Cypress commands above it to execute. If you need to update your configuration mid-test, be sure to either chain the command the {% url "asynchronously Cypress command" introduction-to-cypress#Commands-Are-Asynchronous %} before it or wrap execute it with the `then` Cypress command to correctly queue.
+
+```javascript
+it('using cy.then', () => {
+  cy.visit('/my-test_page')
+  cy.click('#download-html')
+  cy.then(() => {
+    Cypress.config('baseUrl', 'null')
+  })
+
+  cy.visit('/downloads/contents.html')
+})
+```
 
 ## Why is it `Cypress.config` and not `cy.config`?
 

@@ -11,6 +11,7 @@
 - `responseTimeout`
 - `retries`
 - `scrollBehavior`
+- `slowTestThreshold`
 - `viewportHeight`
 - `viewportWidth`
 - `waitForAnimations`

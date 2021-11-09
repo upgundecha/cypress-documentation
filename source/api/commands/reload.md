@@ -32,7 +32,7 @@ Whether to reload the current page without using the cache. `true` forces the re
 Option | Default | Description
 --- | --- | ---
 `log` | `true` | {% usage_options log %}
-`timeout` | {% url `pageLoadTimeout` configuration#Timeouts %} | {% usage_options timeout cy.reload %}
+`timeout` | {% url `pageLoadTimeout` configuration#Timeouts %} | {% usage_options timeout cy.reload %} Note: Network requests are limited by the underlying operating system, and may still time out if this value is increased.
 
 ## Yields {% helper_icon yields %}
 
