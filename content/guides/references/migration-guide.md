@@ -22,10 +22,11 @@ plugin to Cypress's built-in attachFile command.
 
 #### Quick guide
 
-The argument signature is different for `.attachFile()` than the `cypress-file-upload` plugin. You can follow the steps below for each argument in order to migrate:
+The argument signature is different for Cypress' builtin `.attachFile()` command than the version the
+`cypress-file-upload` plugin provided. You can follow the steps below for each argument in order to migrate:
 
 In the first argument:
-- `filePath`: Prefix value with `fixtures/'. Rename to `contents`.
+- `filePath`: Prefix value with `fixtures/`. Rename to `contents`.
 - `fileContent`: Use `Buffer.from()` rather than `Cypress.Blob` methods. Rename to `contents`.
 - `encoding`: Remove. No longer needed due to improved binary file handling in Cypress 9.0.
 - `mimeType`: Remove. No longer needed due to improved binary file handling in Cypress 9.0.
@@ -45,7 +46,7 @@ cy.get('[data-cy="file-input"]').attachFile('myfixture.json');
 
 <Badge type="success">After</Badge> Attaching a fixture from disk with
 Cypress 10.0. Cypress follows paths from the root of your test folder
-(as [`cy.readFile()`](/api/commands/readfile)).
+(same as [`cy.readFile()`](/api/commands/readfile)).
 
 
 ```js
@@ -69,7 +70,7 @@ cy.get('[data-cy="dropzone"]').attachFile('myfixture.json', { subjectType: 'drag
 
 <Badge type="success">After</Badge> Attaching a fixture from disk with
 Cypress 10.0. Cypress follows paths from the root of your test folder
-(as [`cy.readFile()`](/api/commands/readfile)).
+(same as [`cy.readFile()`](/api/commands/readfile)).
 
 
 ```js
@@ -90,7 +91,7 @@ cy.get('[data-cy="dropzone"]').attachFile({
 
 <Badge type="success">After</Badge> Attaching a fixture from disk with
 Cypress 10.0. Cypress follows paths from the root of your test folder
-(as [`cy.readFile()`](/api/commands/readfile)).
+(same as [`cy.readFile()`](/api/commands/readfile)).
 
 
 ```js
