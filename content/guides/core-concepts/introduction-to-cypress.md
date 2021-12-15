@@ -522,8 +522,10 @@ it('changes the URL when "awesome" is clicked', () => {
   cy.get('.awesome-selector') // Still nothing happening
     .click() // Nope, nothing
 
-  cy.url() // Nothing to see, yet
-    .should('include', '/my/resource/path#awesomeness') // Nada.
+  cy.get('.hides-when-clicked') // Still nothing happening
+    .should('be.visible') // Still absolutely nothing
+    .click() // Nope, nothing
+    .should('not.be.visible') // Definitely nothing happening yet
 })
 
 // Ok, the test function has finished executing...
