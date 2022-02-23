@@ -6,7 +6,7 @@ function processNode(node, { error }) {
 
   if (!option) {
     return error(
-      `Found a "::testing-type-specific-option" directive without a "option" attribute. You might have intended to import a partial into a markdown file, but no partial can be found without the "option" attribute. The "::testing-type-specific-option" directive should look like "::testing-type-specific-option{option=foo}".`
+      `Found a "::testing-type-specific-option" directive without a "option" attribute. This directive should look like "::testing-type-specific-option{option=configOptionName}".`
     )
   }
 
